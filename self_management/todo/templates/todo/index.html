@@ -1,0 +1,47 @@
+{% extends "base.html "%}
+{% load static %}
+{% block link %}
+  <link rel="stylesheet" href="{% static 'todo/index.css' %}">
+{% endblock %}
+
+{% block title %}Todo List{% endblock %}
+
+{% block content %}
+{% if todo_list %}
+<ul id="index">
+{% for todo in todo_list %}
+  <li>
+    <a href={% url "todo:detail" todo.pk %}>{{todo.title}}</a>
+  {% if todo.due > now %}
+    <p>
+      期限まであと
+    {% for time in todo.calculate_diff_due_now %}
+      {{time}}
+    {% endfor %}
+    </p>
+  {% else %}
+    <p class="dead">
+    期限から
+    {% for time in todo.calculate_diff_due_now %}
+    {{time}}
+    {% endfor %}
+    経過
+    </p>
+  {% endif %}
+    <label>経過:
+    {% if todo.calculate_proportion < 1 %}
+      <progress value="{{ todo.calculate_proportion }}"></progress>
+    {% else %}
+      <progress class="dead" value="{{ todo.calculate_proportion }}"></progress>
+    {% endif %}
+
+    </label>
+  </li>
+{% endfor %}
+</ul>
+{% else %}
+<p>No Tasks</p>
+{% endif %}
+
+<button type="button" onclick="location.href='{% url "todo:create"%}'">新規</button>
+{% endblock %}

@@ -1,0 +1,24 @@
+body {
+  margin: 0px;
+}
+nav {
+  border-bottom: dashed 10px black;
+}
+nav ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+nav ul li {
+  list-style: none;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: black;
+}
+
+nav ul a:hover {
+  text-decoration: underline;
+}
