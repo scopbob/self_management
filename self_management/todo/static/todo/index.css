@@ -28,7 +28,7 @@ ul#index li a {
   text-decoration: none;
 }
 
-ul#index li p.dead {
+ul#index li span.dead {
   color: red;
   text-decoration: underline;
 }

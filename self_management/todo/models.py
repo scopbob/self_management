@@ -24,10 +24,7 @@ class Todo(models.Model):
       while(diff > timezone.timedelta(**time_unit)):
         diff_list[i] += 1
         diff -= timezone.timedelta(**time_unit)
-    # 単位を付加
-    deff_list_str = list(map(str, diff_list))
-    deff_list_str = [num + unit for (num, unit) in zip(deff_list_str, ["週間", "日", "時間", "分"])]
-    return deff_list_str
+    return diff_list
 
 
   def calculate_proportion(self):
