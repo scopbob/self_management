@@ -15,18 +15,6 @@ class Todo(models.Model):
   due = models.DateTimeField()
   start = models.DateTimeField()
 
-  def calculate_diff_due_now(self):
-    now = timezone.now()
-    diff = abs(self.due - now)
-    time_units = ({"weeks": 1}, {"days": 1}, {"hours": 1}, {"minutes": 1})
-    diff_list = [0] * 4  # [weeks, days, hours, minutes]
-    for i, time_unit in enumerate(time_units):
-      while(diff > timezone.timedelta(**time_unit)):
-        diff_list[i] += 1
-        diff -= timezone.timedelta(**time_unit)
-    return diff_list
-
-
   def calculate_proportion(self):
     now = timezone.now()
     progress = now - self.start

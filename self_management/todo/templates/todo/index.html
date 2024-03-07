@@ -9,58 +9,60 @@
 {% block content %}
 {% if todo_list %}
 <ul id="index">
-{% for todo in todo_list %}
-  <li>
-    <a href={% url "todo:detail" todo.pk %}>{{todo.title}}</a>
-    <span id="timer:{{ todo.pk }}"></span>
-    <script>
-      {% if forloop.first %}
-      function countdown(due){
-        const now = new Date();
-        var dead = false;
-        if (due.getTime() < now.getTime()){
-          dead = true;
+  <form method="POST">{% csrf_token %}
+  {% for todo in todo_list %}
+    <li>
+      <input type="checkbox" name="delete" value={{todo.pk}}>
+      <a href={% url "todo:detail" todo.pk %}>{{todo.title}}</a>
+      <span id="timer:{{ todo.pk }}"></span>
+      <script>
+        {% if forloop.first %}
+        function countdown(due){
+          const now = new Date();
+          var dead = false;
+          if (due.getTime() < now.getTime()){
+            dead = true;
+          }
+          const rest = Math.abs(due.getTime() - now.getTime());
+          const min = Math.floor(rest/1000/60) % 60;
+          const hours = Math.floor(rest/1000/60/60) % 24;
+          const days = Math.floor(rest/1000/60/60/24) % 7;
+          const weeks = Math.floor(rest/1000/60/60/24/7);
+          const count = [dead, weeks, days, hours, min];
+          return count;
         }
-        const rest = Math.abs(due.getTime() - now.getTime());
-        const min = Math.floor(rest/1000/60) % 60;
-        const hours = Math.floor(rest/1000/60/60) % 24;
-        const days = Math.floor(rest/1000/60/60/24) % 7;
-        const weeks = Math.floor(rest/1000/60/60/24/7);
-        const count = [dead, weeks, days, hours, min];
-        return count;
-      }
-      function recalc(due, pk) {
-        console.log(due)
-        console.log(countdown(due));
-        const counter = countdown(due);
-        const time = `${counter[1]}週間${counter[2]}日${counter[3]}時間${counter[4]}分`
-        console.log(time);
-        if (counter[0]){
-          document.getElementById(pk).textContent = "期限から" + time + "経過";
-          document.getElementById(pk).className = "dead";
+        function recalc(due, pk) {
+          console.log(due)
+          console.log(countdown(due));
+          const counter = countdown(due);
+          const time = `${counter[1]}週間${counter[2]}日${counter[3]}時間${counter[4]}分`
+          console.log(time);
+          if (counter[0]){
+            document.getElementById(pk).textContent = "期限から" + time + "経過";
+            document.getElementById(pk).className = "dead";
+          }
+          else{
+            document.getElementById(pk).textContent = "期限まで残り" + time;
+          }
+          setTimeout(recalc, 1000*60, due, pk);
         }
-        else{
-          document.getElementById(pk).textContent = "期限まで残り" + time;
-        }
-        setTimeout(recalc, 1000*60, due, pk);
-      }
+        {% endif %}
+        {% autoescape off %}
+        var due = new Date("{{ todo.due.isoformat }}");
+        {% endautoescape %}
+        recalc(due, 'timer:{{ todo.pk }}');
+      </script>
+      <br>
+      <label>経過:
+      {% if todo.calculate_proportion < 1 %}
+        <progress value="{{ todo.calculate_proportion }}"></progress>
+      {% else %}
+        <progress class="dead" value="{{ todo.calculate_proportion }}"></progress>
       {% endif %}
-      {% autoescape off %}
-      var due = new Date("{{ todo.due.isoformat }}");
-      {% endautoescape %}
-      recalc(due, 'timer:{{ todo.pk }}');
-    </script>
-    <br>
-    <label>経過:
-    {% if todo.calculate_proportion < 1 %}
-      <progress value="{{ todo.calculate_proportion }}"></progress>
-    {% else %}
-      <progress class="dead" value="{{ todo.calculate_proportion }}"></progress>
-    {% endif %}
-    </label>
-
-  </li>
-{% endfor %}
+      </label>
+    </li>
+  {% endfor %}
+  </form>
 </ul>
 {% else %}
 <p>No Tasks</p>

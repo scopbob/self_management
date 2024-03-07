@@ -1,27 +1,32 @@
-from django.shortcuts import render
+from django.db.models.base import Model as Model
+from django.db.models.query import QuerySet
+from django.shortcuts import render, redirect
 from django.views import generic
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.utils import timezone
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from .models import Todo
 from .forms import TodoModelForm
 
-# Create your views here.
+class CreaterOnly(UserPassesTestMixin):
+  def test_func(self):
+    user = self.request.user
+    todo_pk = self.kwargs["pk"]
+    creater = Todo.objects.get(pk=todo_pk).user
+    return user == creater
+
+  def handle_no_permission(self):
+    return redirect(reverse_lazy("todo:index"))
+
+
 class IndexView(LoginRequiredMixin, generic.ListView):
   template_name = "todo/index.html"
 
   def get_queryset(self):
     return Todo.objects.filter(user=self.request.user)
 
-  def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
-    context["now"] = timezone.now()
-    return context
 
-
-
-class DetailView(LoginRequiredMixin, generic.DetailView):
+class DetailView(LoginRequiredMixin, CreaterOnly, generic.DetailView):
   model = Todo
   template_name = "todo/detail.html"
 
@@ -37,7 +42,7 @@ class CreateNewTask(LoginRequiredMixin, generic.edit.CreateView):
     return kwgs
 
 
-class UpdateTask(LoginRequiredMixin, generic.edit.UpdateView):
+class UpdateTask(LoginRequiredMixin, CreaterOnly, generic.edit.UpdateView):
   model = Todo
   template_name = "todo/update.html"
   form_class = TodoModelForm
