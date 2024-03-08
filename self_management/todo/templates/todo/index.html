@@ -70,6 +70,10 @@
       </script>
     </li>
   {% endfor %}
+  <button>delete</button>
+  {% for message in messages %}
+  <span>{{message}}</span>
+  {% endfor %}
   </form>
 </ul>
 {% else %}
