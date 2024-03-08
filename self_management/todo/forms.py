@@ -7,6 +7,7 @@ from .models import Todo
 
 
 class TodoModelForm(forms.ModelForm):
+  text = forms.CharField(widget=forms.Textarea, required=False)
   due = forms.SplitDateTimeField(widget=forms.widgets.SplitDateTimeWidget(date_attrs={"type":"date"}, time_attrs={"type":"time"}))
   start = forms.SplitDateTimeField(widget=forms.widgets.SplitDateTimeWidget(date_attrs={"type":"date"}, time_attrs={"type":"time"}))
   class Meta:

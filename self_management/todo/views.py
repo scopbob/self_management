@@ -2,7 +2,8 @@ from django.db.models.base import Model as Model
 from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect
 from django.views import generic
-from django.urls import reverse_lazy
+from django.utils.http import urlencode
+from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -14,7 +15,7 @@ class CreaterOnly(UserPassesTestMixin):
     user = self.request.user
     todo_pk = self.kwargs["pk"]
     creater = Todo.objects.get(pk=todo_pk).user
-    return user == creater
+    return user.pk == creater.pk
 
   def handle_no_permission(self):
     return redirect("todo:index")
@@ -30,7 +31,25 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     post_pks = request.POST.getlist("delete")
     if len(post_pks) == 0:
       messages.error(self.request, "選択されていません")
-    Todo.objects.filter(pk__in=post_pks).delete()
+      return redirect("todo:index")
+    redirect_url = reverse('todo:delete')
+    parameters = urlencode(dict(delete_list=post_pks))
+    url = f'{redirect_url}?{parameters}'
+    return redirect(url)
+
+
+class DeleteCheck(LoginRequiredMixin, generic.ListView):
+  template_name = "todo/delete_list.html"
+
+  def get_queryset(self):
+    if "delete_list" in self.request.GET:
+      delete_check_list = eval(self.request.GET.get("delete_list"))
+      delete_check_list = list(map(int, delete_check_list))
+      return Todo.objects.filter(pk__in=delete_check_list, user=self.request.user)
+
+  def post(self, request):
+    post_pks = request.POST.getlist("delete")
+    Todo.objects.filter(pk__in=post_pks, user=self.request.user).delete()
     return redirect("todo:index")
 
 

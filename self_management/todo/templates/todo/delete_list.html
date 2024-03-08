@@ -4,15 +4,16 @@
   <link rel="stylesheet" href="{% static 'todo/index.css' %}">
 {% endblock %}
 
-{% block title %}Todo List{% endblock %}
+{% block title %}Delete List{% endblock %}
 
 {% block content %}
 {% if todo_list %}
+<h1>以下のtodoを本当に削除しますか?</h1>
 <ul id="index">
   <form method="POST">{% csrf_token %}
   {% for todo in todo_list %}
     <li>
-      <input type="checkbox" name="delete" value={{todo.pk}} />
+      <input type="checkbox" name="delete" value={{todo.pk}} checked />
       <a href={% url "todo:detail" todo.pk %}>{{todo.title}}</a>
       <span id="timer-{{ todo.pk }}"></span>
       <progress id="proportion-{{ todo.pk }}"></progress>
@@ -71,14 +72,10 @@
     </li>
   {% endfor %}
   <button>delete</button>
-  {% for message in messages %}
-  <span>{{message}}</span>
-  {% endfor %}
   </form>
-</ul>
 {% else %}
-<p>No Tasks</p>
+  <p>No Tasks</p>
 {% endif %}
-
-<button type="button" onclick="location.href='{% url "todo:create" %}'">新規</button>
+  <button type="button" onclick='location.href="{% url 'todo:index' %}"'>cancel</button>
+</ul>
 {% endblock %}
