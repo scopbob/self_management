@@ -14,7 +14,6 @@ class TodoModelForm(forms.ModelForm):
     exclude = ["user"]
 
   def __init__(self, user=None, *args, **kwargs):
-      #...(他のコードは割愛してます)
       self.user = user
       super().__init__(*args, **kwargs)
       self.fields["start"].initial = timezone.now().replace(second=0)
@@ -32,4 +31,4 @@ class TodoModelForm(forms.ModelForm):
     due = cleaned_data.get("due")
     start = cleaned_data.get("start")
     if due <= start:
-      raise ValidationError("due must be after start")
+      raise ValidationError("due must be set after start")

@@ -14,10 +14,3 @@ class Todo(models.Model):
   text = models.TextField(max_length=500)
   due = models.DateTimeField()
   start = models.DateTimeField()
-
-  def calculate_proportion(self):
-    now = timezone.now()
-    progress = now - self.start
-    whole = self.due - self.start
-    proportion = progress / whole
-    return proportion
