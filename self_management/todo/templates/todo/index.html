@@ -14,10 +14,11 @@
     <li>
       <input type="checkbox" name="delete" value={{todo.pk}}>
       <a href={% url "todo:detail" todo.pk %}>{{todo.title}}</a>
-      <span id="timer:{{ todo.pk }}"></span>
+      <span id="timer-{{ todo.pk }}"></span>
+      <progress id="proportion-{{ todo.pk }}"></progress>
       <script>
         {% if forloop.first %}
-        function countdown(due){
+        function calcRemainingTime(due){
           const now = new Date();
           var dead = false;
           if (due.getTime() < now.getTime()){
@@ -31,35 +32,42 @@
           const count = [dead, weeks, days, hours, min];
           return count;
         }
-        function recalc(due, pk) {
-          console.log(due)
-          console.log(countdown(due));
-          const counter = countdown(due);
+
+        function calcProportion(start, due){
+          const now = new Date();
+          const progress = now - start;
+          const whole = due - start;
+          const proportion = progress / whole
+          return proportion
+        }
+
+        function displayRemainingTime(due, start, pk) {
+          //display time
+          const counter = calcRemainingTime(due);
           const time = `${counter[1]}週間${counter[2]}日${counter[3]}時間${counter[4]}分`
-          console.log(time);
+          const pk_timer = "timer-" + pk;
+          const pk_proportion = "proportion-" + pk;
           if (counter[0]){
-            document.getElementById(pk).textContent = "期限から" + time + "経過";
-            document.getElementById(pk).className = "dead";
+            document.getElementById(pk_timer).textContent = "期限から" + time + "経過";
+            document.getElementById(pk_timer).className = "dead";
           }
           else{
-            document.getElementById(pk).textContent = "期限まで残り" + time;
+            document.getElementById(pk_timer).textContent = "期限まで残り" + time;
           }
-          setTimeout(recalc, 1000*60, due, pk);
+
+          //display progressbar
+          const proportion = calcProportion(start, due);
+          document.getElementById(pk_proportion).value = proportion;
+
+          setTimeout(displayRemainingTime, 1000*60, due, start, pk);
         }
         {% endif %}
         {% autoescape off %}
         var due = new Date("{{ todo.due.isoformat }}");
+        var start = new Date("{{ todo.start.isoformat }}");
         {% endautoescape %}
-        recalc(due, 'timer:{{ todo.pk }}');
+        displayRemainingTime(due, start, '{{ todo.pk }}');
       </script>
-      <br>
-      <label>経過:
-      {% if todo.calculate_proportion < 1 %}
-        <progress value="{{ todo.calculate_proportion }}"></progress>
-      {% else %}
-        <progress class="dead" value="{{ todo.calculate_proportion }}"></progress>
-      {% endif %}
-      </label>
     </li>
   {% endfor %}
   </form>
