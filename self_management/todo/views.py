@@ -1,6 +1,4 @@
-from django.db.models.base import Model as Model
-from django.db.models.query import QuerySet
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views import generic
 from django.utils.http import urlencode
 from django.urls import reverse, reverse_lazy
