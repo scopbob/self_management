@@ -23,7 +23,7 @@ class IndexView(LoginRequiredMixin, generic.ListView):
   template_name = "todo/index.html"
 
   def get_queryset(self):
-    return Todo.objects.filter(user=self.request.user)
+    return Todo.objects.filter(user=self.request.user).order_by("due")
 
   def post(self, request):
     post_pks = request.POST.getlist("delete")

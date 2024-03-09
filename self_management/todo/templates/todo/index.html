@@ -11,7 +11,7 @@
 <ul id="index">
   <form method="POST">{% csrf_token %}
   {% for todo in todo_list %}
-    <li style="background:{{ todo.categorys.color }};">
+    <li style="background:{{ todo.category.color }};">
       <input type="checkbox" name="delete" value={{todo.pk}} />
       <a href={% url "todo:detail" todo.pk %}>{{todo.title}}</a>
       <span id="timer-{{ todo.pk }}"></span>

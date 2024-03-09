@@ -28,4 +28,4 @@ class Todo(models.Model):
   text = models.TextField(max_length=500, blank=True)
   due = models.DateTimeField()
   start = models.DateTimeField()
-  categorys = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+  category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
