@@ -29,3 +29,9 @@ class Todo(models.Model):
   due = models.DateTimeField()
   start = models.DateTimeField()
   category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+  PRIORITY_CHOICES = {
+    1:"high",
+    2:"middle",
+    3:"low"
+  }
+  priority = models.IntegerField(choices=PRIORITY_CHOICES, default=2)

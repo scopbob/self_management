@@ -42,23 +42,31 @@
         }
 
         function displayRemainingTime(due, start, pk) {
-          //display time
-          const counter = calcRemainingTime(due);
-          const time = `${counter[1]}週間${counter[2]}日${counter[3]}時間${counter[4]}分`
           const pk_timer = "timer-" + pk;
+          const timer = document.getElementById(pk_timer)
           const pk_proportion = "proportion-" + pk;
-          if (counter[0]){
-            document.getElementById(pk_timer).textContent = "期限から" + time + "経過";
-            document.getElementById(pk_timer).className = "dead";
+          const progress_bar = document.getElementById(pk_proportion)
+
+          const proportion = calcProportion(start, due);
+          if(proportion > 0){
+            progress_bar.value = proportion;
+
+            //display remaining time
+            const counter = calcRemainingTime(due);
+            const time = `${counter[1]}週間${counter[2]}日${counter[3]}時間${counter[4]}分`
+
+            if (counter[0]){
+              timer.textContent = "期限から" + time + "経過";
+              timer.className = "dead";
+            }
+            else{
+              timer.textContent = "期限まで残り" + time;
+            }
           }
           else{
-            document.getElementById(pk_timer).textContent = "期限まで残り" + time;
+            timer.textContent = "まだ開始されていないタスク"
+            progress_bar.style.visibility = "hidden";
           }
-
-          //display progressbar
-          const proportion = calcProportion(start, due);
-          document.getElementById(pk_proportion).value = proportion;
-
           setTimeout(displayRemainingTime, 1000*60, due, start, pk);
         }
         {% endif %}
