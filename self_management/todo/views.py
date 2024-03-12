@@ -5,7 +5,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-from .models import Todo
+from .models import Todo, Category
 from .forms import TodoModelForm
 
 class CreaterOnly(UserPassesTestMixin):
@@ -18,22 +18,49 @@ class CreaterOnly(UserPassesTestMixin):
   def handle_no_permission(self):
     return redirect("todo:index")
 
+def get_request_list(self, key):
+  request_list = eval(self.request.GET.get(key))
+  request_list = list(map(int, request_list))
+  return request_list
+
+def add_queryparam(redirect_name, parameters):
+  redirect_url = reverse(redirect_name)
+  add_parameters = urlencode(parameters)
+  url = f'{redirect_url}?{add_parameters}'
+  return url
+
 
 class IndexView(LoginRequiredMixin, generic.ListView):
   template_name = "todo/index.html"
 
   def get_queryset(self):
-    return Todo.objects.filter(user=self.request.user).order_by("due")
+    user_todo = Todo.objects.filter(user=self.request.user)
+    if "category" in self.request.GET:
+      filter = self.request.GET.get("category")
+      return user_todo.filter(category__name=filter)
+    return user_todo
+
+
+  def get_context_data(self, **kwargs):
+      context = super().get_context_data(**kwargs)
+      context["category_list"] = Category.objects.filter(user=self.request.user)
+      return context
 
   def post(self, request):
-    post_pks = request.POST.getlist("delete")
-    if len(post_pks) == 0:
-      messages.error(self.request, "選択されていません")
-      return redirect("todo:index")
-    redirect_url = reverse('todo:delete')
-    parameters = urlencode(dict(delete_list=post_pks))
-    url = f'{redirect_url}?{parameters}'
-    return redirect(url)
+    if "delete" in request.POST:
+      post_pks = request.POST.getlist("delete")
+      if len(post_pks) == 0:
+        messages.error(self.request, "選択されていません")
+        return redirect("todo:index")
+      url = add_queryparam("todo:delete", dict(delete_list=post_pks))
+      return redirect(url)
+
+    if "category" in request.POST:
+      filter_element = request.POST.get("category")
+      url = add_queryparam("todo:index", dict(category=filter_element))
+      if filter_element == "no filter":
+        return redirect("todo:index")
+      return redirect(url)
 
 
 class DeleteCheck(LoginRequiredMixin, generic.ListView):
@@ -41,8 +68,7 @@ class DeleteCheck(LoginRequiredMixin, generic.ListView):
 
   def get_queryset(self):
     if "delete_list" in self.request.GET:
-      delete_check_list = eval(self.request.GET.get("delete_list"))
-      delete_check_list = list(map(int, delete_check_list))
+      delete_check_list = get_request_list(self, "delete_list")
       return Todo.objects.filter(pk__in=delete_check_list, user=self.request.user)
 
   def post(self, request):

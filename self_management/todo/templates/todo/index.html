@@ -84,6 +84,17 @@
   {% endfor %}
   </form>
 </ul>
+<dev>
+  <form method="POST">{% csrf_token %}
+    <select name="category" onchange="submit(this.form)">
+      <option value="">category filter</option>
+      <option value="no filter">no filter</option>
+      {% for category in category_list %}
+      <option value="{{category}}"> {{category}} </option>
+      {% endfor %}
+    </select>
+  </form>
+</dev>
 {% else %}
 <p>No Tasks</p>
 {% endif %}
