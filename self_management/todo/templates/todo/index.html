@@ -7,94 +7,98 @@
 {% block title %}Todo List{% endblock %}
 
 {% block content %}
-{% if todo_list %}
-<ul id="index">
-  <form method="POST">{% csrf_token %}
-  {% for todo in todo_list %}
-    <li style="background:{{ todo.category.color }};">
-      <input type="checkbox" name="delete" value={{todo.pk}} />
-      <a href={% url "todo:detail" todo.pk %}>{{todo.title}}</a>
-      <span id="timer-{{ todo.pk }}"></span>
-      <progress id="proportion-{{ todo.pk }}"></progress>
-      <script>
-        {% if forloop.first %}
-        function calcRemainingTime(due){
-          const now = new Date();
-          var dead = false;
-          if (due.getTime() < now.getTime()){
-            dead = true;
-          }
-          const rest = Math.abs(due.getTime() - now.getTime());
-          const min = Math.floor(rest/1000/60) % 60;
-          const hours = Math.floor(rest/1000/60/60) % 24;
-          const days = Math.floor(rest/1000/60/60/24) % 7;
-          const weeks = Math.floor(rest/1000/60/60/24/7);
-          const count = [dead, weeks, days, hours, min];
-          return count;
-        }
-
-        function calcProportion(start, due){
-          const now = new Date();
-          const progress = now - start;
-          const whole = due - start;
-          const proportion = progress / whole
-          return proportion
-        }
-
-        function displayRemainingTime(due, start, pk) {
-          const pk_timer = "timer-" + pk;
-          const timer = document.getElementById(pk_timer)
-          const pk_proportion = "proportion-" + pk;
-          const progress_bar = document.getElementById(pk_proportion)
-
-          const proportion = calcProportion(start, due);
-          if(proportion > 0){
-            progress_bar.value = proportion;
-
-            //display remaining time
-            const counter = calcRemainingTime(due);
-            const time = `${counter[1]}週間${counter[2]}日${counter[3]}時間${counter[4]}分`
-
-            if (counter[0]){
-              timer.textContent = "期限から" + time + "経過";
-              timer.className = "dead";
+<article>
+  <div id="content">
+    {% if todo_list %}
+    <ul id="index">
+      <form method="POST">{% csrf_token %}
+      {% for todo in todo_list %}
+        <li style="background:{{ todo.category.color }};">
+          <input type="checkbox" name="delete" value={{todo.pk}} />
+          <a href={% url "todo:detail" todo.pk %}>{{todo.title}}</a>
+          <span id="timer-{{ todo.pk }}"></span>
+          <progress id="proportion-{{ todo.pk }}"></progress>
+          <script>
+            {% if forloop.first %}
+            function calcRemainingTime(due){
+              const now = new Date();
+              var dead = false;
+              if (due.getTime() < now.getTime()){
+                dead = true;
+              }
+              const rest = Math.abs(due.getTime() - now.getTime());
+              const min = Math.floor(rest/1000/60) % 60;
+              const hours = Math.floor(rest/1000/60/60) % 24;
+              const days = Math.floor(rest/1000/60/60/24) % 7;
+              const weeks = Math.floor(rest/1000/60/60/24/7);
+              const count = [dead, weeks, days, hours, min];
+              return count;
             }
-            else{
-              timer.textContent = "期限まで残り" + time;
+
+            function calcProportion(start, due){
+              const now = new Date();
+              const progress = now - start;
+              const whole = due - start;
+              const proportion = progress / whole
+              return proportion
             }
-          }
-          else{
-            timer.textContent = "まだ開始されていないタスク"
-            progress_bar.style.visibility = "hidden";
-          }
-          setTimeout(displayRemainingTime, 1000*60, due, start, pk);
-        }
-        {% endif %}
-        {% autoescape off %}
-        var due = new Date("{{ todo.due.isoformat }}");
-        var start = new Date("{{ todo.start.isoformat }}");
-        {% endautoescape %}
-        displayRemainingTime(due, start, '{{ todo.pk }}');
-      </script>
-    </li>
-  {% endfor %}
-  <button>delete</button>
-  {% for message in messages %}
-  <span>{{message}}</span>
-  {% endfor %}
-  </form>
-</ul>
-<dev>
-  <form method="POST">{% csrf_token %}
-    <select name="category" onchange="submit(this.form)">
-      <option value="">category filter</option>
-      <option value="no filter">no filter</option>
-      {% for category in category_list %}
-      <option value="{{category}}"> {{category}} </option>
+
+            function displayRemainingTime(due, start, pk) {
+              const pk_timer = "timer-" + pk;
+              const timer = document.getElementById(pk_timer)
+              const pk_proportion = "proportion-" + pk;
+              const progress_bar = document.getElementById(pk_proportion)
+
+              const proportion = calcProportion(start, due);
+              if(proportion > 0){
+                progress_bar.value = proportion;
+
+                //display remaining time
+                const counter = calcRemainingTime(due);
+                const time = `${counter[1]}週間${counter[2]}日${counter[3]}時間${counter[4]}分`
+
+                if (counter[0]){
+                  timer.textContent = "期限から" + time + "経過";
+                  timer.className = "dead";
+                }
+                else{
+                  timer.textContent = "期限まで残り" + time;
+                }
+              }
+              else{
+                timer.textContent = "まだ開始されていないタスク"
+                progress_bar.style.visibility = "hidden";
+              }
+              setTimeout(displayRemainingTime, 1000*60, due, start, pk);
+            }
+            {% endif %}
+            {% autoescape off %}
+            var due = new Date("{{ todo.due.isoformat }}");
+            var start = new Date("{{ todo.start.isoformat }}");
+            {% endautoescape %}
+            displayRemainingTime(due, start, '{{ todo.pk }}');
+          </script>
+        </li>
       {% endfor %}
-    </select>
-  </form>
-</dev>
+      <button>delete</button>
+      {% for message in messages %}
+      <span>{{message}}</span>
+      {% endfor %}
+      </form>
+    </ul>
+  </div>
+  <dev id="side">
+    <form method="POST">{% csrf_token %}
+      <select name="category" onchange="submit(this.form)">
+        <option value="">category filter</option>
+        <option value="no filter">no filter</option>
+        {% for category in category_list %}
+        <option value="{{category}}"> {{category}} </option>
+        {% endfor %}
+      </select>
+    </form>
+  </dev>
+</article>
 {% else %}
 <p>No Tasks</p>
 {% endif %}

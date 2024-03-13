@@ -32,3 +32,19 @@ ul#index li span.dead {
   color: red;
   text-decoration: underline;
 }
+
+article {
+  display: flex;
+  justify-content: space-between;
+}
+
+#content {
+  flex-grow: 1;
+}
+#side {
+  width: 100px;
+  padding: 10px;
+  border: solid 5px black;
+  border-radius: 15px;
+  margin-top: 10px;
+}
