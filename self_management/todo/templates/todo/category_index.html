@@ -1,0 +1,14 @@
+{% extends "base.html "%}
+
+{% block title %}Category{% endblock %}
+
+{% block content %}
+<ul>
+  {% for category in category_list %}
+    <li>
+      {{ category.name }}
+    </li>
+  {% endfor %}
+</ul>
+<button type="button" onclick="location.href='{% url "todo:category_create" %}'">新規</button>
+{% endblock content %}

@@ -87,6 +87,10 @@
       </form>
     </ul>
   </div>
+{% else %}
+    <p>No Tasks</p>
+  </div>
+{% endif %}
   <dev id="side">
     <form method="POST">{% csrf_token %}
       <select name="category" onchange="submit(this.form)">
@@ -97,12 +101,8 @@
         {% endfor %}
       </select>
     </form>
-
   </dev>
 </article>
-{% else %}
-<p>No Tasks</p>
-{% endif %}
 
 <button type="button" onclick="location.href='{% url "todo:create" %}'">新規</button>
 {% endblock %}

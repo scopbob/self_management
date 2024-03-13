@@ -6,6 +6,6 @@
   <form method="POST"> {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">作成</button>
-    <button type="button" onclick="location.href='{% url "todo:create"%}'">キャンセル</button>
+    <button type="button" onclick="location.href='{% url "todo:category_index"%}'">キャンセル</button>
   </form>
 {% endblock %}
