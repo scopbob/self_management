@@ -1,0 +1,11 @@
+{% extends "base.html "%}
+
+{% block title %}Create Todo{% endblock %}
+
+{% block content %}
+  <form method="POST"> {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">作成</button>
+    <button type="button" onclick="location.href='{% url "todo:create"%}'">キャンセル</button>
+  </form>
+{% endblock %}

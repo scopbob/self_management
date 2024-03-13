@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from .models import Todo, Category
-from .forms import TodoModelForm
+from .forms import TodoModelForm, CategoryModelForm
 
 class CreaterOnly(UserPassesTestMixin):
   def test_func(self):
@@ -98,3 +98,21 @@ class UpdateTask(LoginRequiredMixin, CreaterOnly, generic.edit.UpdateView):
   template_name = "todo/update.html"
   form_class = TodoModelForm
   success_url = reverse_lazy("todo:index")
+
+
+class CategoryList(LoginRequiredMixin, generic.ListView):
+  template_name = "todo/category_index.html"
+
+  def get_queryset(self):
+    return Category.objects.filter(user=self.request.user)
+
+
+class CreateCategory(LoginRequiredMixin, generic.edit.CreateView):
+  template_name = "todo/category_create.html"
+  form_class = CategoryModelForm
+  success_url = reverse_lazy("todo:create")
+
+  def get_form_kwargs(self):
+    kwgs = super().get_form_kwargs()
+    kwgs["user"] = self.request.user
+    return kwgs

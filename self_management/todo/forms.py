@@ -2,7 +2,7 @@ from django import forms
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-from .models import Todo
+from .models import Todo, Category
 
 
 class TodoModelForm(forms.ModelForm):
@@ -31,3 +31,21 @@ class TodoModelForm(forms.ModelForm):
     start = cleaned_data.get("start")
     if due <= start:
       raise ValidationError("due must be set after start")
+
+
+class CategoryModelForm(forms.ModelForm):
+  class Meta:
+    model = Category
+    exclude = ["user"]
+
+  def __init__(self, user=None, *args, **kwargs):
+      self.user = user
+      super().__init__(*args, **kwargs)
+
+  def save(self, commit=True):
+      todo = super().save(commit=False)
+      if self.user:
+          todo.user = self.user
+      if commit:
+          todo.save()
+      return todo

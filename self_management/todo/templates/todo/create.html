@@ -4,8 +4,19 @@
 
 {% block content %}
   <form method="POST"> {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">作成</button>
-    <button type="button" onclick="location.href='{% url "todo:index"%}'">キャンセル</button>
+    {{ form.non_field_errors }}
+    {% for field in form %}
+        <div class="field">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.help_text %}
+                <span class="helptext">{{ field.help_text }}</span>
+            {% endif %}
+            {% if field is form.category %}<button type="button" onclick="location.href='{% url "todo:category_create"%}'">new</button>{% endif %}
+            {{ field.errors }}
+        </div>
+    {% endfor %}
+    <button type="submit">create</button>
+    <button type="button" onclick="location.href='{% url "todo:index"%}'">cancel</button>
   </form>
 {% endblock %}
