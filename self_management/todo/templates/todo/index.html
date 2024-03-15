@@ -10,10 +10,14 @@
 <article>
   <div id="content">
     {% if todo_list %}
-    <ul id="index">
-      <form method="POST">{% csrf_token %}
+    <form method="POST">{% csrf_token %}
+      <ul id="index">
       {% for todo in todo_list %}
-        <li style="background:{{ todo.category.color }};">
+        {% if todo.category.color %}
+        <li style="border-left-color:{{ todo.category.color }};">
+        {% else %}
+        <li>
+        {% endif %}
           <input type="checkbox" name="delete" value={{todo.pk}} />
           <a href={% url "todo:detail" todo.pk %}>{{todo.title}}</a>
           <span id="timer-{{ todo.pk }}"></span>
@@ -80,29 +84,30 @@
           </script>
         </li>
       {% endfor %}
-      <button>delete</button>
-      {% for message in messages %}
-      <span>{{message}}</span>
-      {% endfor %}
-      </form>
-    </ul>
+      </ul>
+      <button type="submit" id="delete"><img src="{% static 'todo/trash_can.png' %}" alt="delete"></button>
+    </form>
   </div>
 {% else %}
     <p>No Tasks</p>
   </div>
 {% endif %}
   <dev id="side">
+    <header>MENU</header>
     <form method="POST">{% csrf_token %}
-      <select name="category" onchange="submit(this.form)">
-        <option value="">category filter</option>
-        <option value="no filter">no filter</option>
-        {% for category in category_list %}
-        <option value="{{category}}"> {{category}} </option>
-        {% endfor %}
-      </select>
+      <fieldset id="filter">
+        <legend>filter</legend>
+        <select title="category" name="category" onchange="submit(this.form)">
+          <option value="">category filter</option>
+          <option value="no filter">no filter</option>
+          {% for category in category_list %}
+          <option value="{{category}}"> {{category}} </option>
+          {% endfor %}
+        </select>
+      </fieldset>
     </form>
   </dev>
 </article>
 
-<button type="button" onclick="location.href='{% url "todo:create" %}'">新規</button>
+<button type="button" onclick="location.href='{% url "todo:create" %}'">Create todo</button>
 {% endblock %}

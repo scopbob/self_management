@@ -2,7 +2,7 @@ body {
   margin: 0px;
 }
 nav {
-  border-bottom: dashed 10px black;
+  border-bottom: solid 2px #cccccc;
 }
 nav ul {
   display: flex;

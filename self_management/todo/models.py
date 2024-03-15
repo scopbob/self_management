@@ -9,14 +9,7 @@ class Category(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    COLOR_CHOICES = {
-      "#333333":"light_black",
-      "#66ff66":"light_green",
-      "#66ffff":"light_blue",
-      "#3333cc":"deep_blue",
-      "#ff0000":"red",
-    }
-    color = models.CharField(max_length=11, choices=COLOR_CHOICES, default="#66ffff")
+    color = models.CharField(max_length=20)
 
 
 class Todo(models.Model):

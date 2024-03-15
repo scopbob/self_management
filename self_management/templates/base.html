@@ -13,13 +13,13 @@
     <header>
       <nav>
         {% if user.is_authenticated %}
-        <ul>
-          <li><a href={% url "todo:index" %}>To do</a></li>
-          <li><a href={% url "todo:category_index" %}>category</a></li>
-          <form action="{% url 'accounts:logout' %}" method="post">{% csrf_token %}
-          <li><button type="submit">Log out</button></li>
-          </form>
-        </ul>
+        <form action="{% url 'accounts:logout' %}" method="post">{% csrf_token %}
+          <ul>
+            <li><a href={% url "todo:index" %}>To do</a></li>
+            <li><a href={% url "todo:category_index" %}>category</a></li>
+            <li><button type="submit">Log out</button></li>
+          </ul>
+        </form>
         {% else %}
         <h3>You need Log in</h3>
         {% endif %}

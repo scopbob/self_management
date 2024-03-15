@@ -48,9 +48,6 @@ class IndexView(LoginRequiredMixin, generic.ListView):
   def post(self, request):
     if "delete" in request.POST:
       post_pks = request.POST.getlist("delete")
-      if len(post_pks) == 0:
-        messages.error(self.request, "選択されていません")
-        return redirect("todo:index")
       url = add_queryparam("todo:delete", dict(delete_list=post_pks))
       return redirect(url)
 
@@ -60,6 +57,8 @@ class IndexView(LoginRequiredMixin, generic.ListView):
       if filter_element == "no filter":
         return redirect("todo:index")
       return redirect(url)
+
+    return redirect("todo:index")
 
 
 class DeleteCheck(LoginRequiredMixin, generic.ListView):

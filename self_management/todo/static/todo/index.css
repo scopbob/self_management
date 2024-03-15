@@ -1,25 +1,14 @@
-ul#index li {
-  position: relative;
-  list-style-type: none; /*ポチ消す*/
-  padding: 0.5em 0.5em 0.5em 0.5em;
+ul#index {
   margin-bottom: 5px;
-  line-height: 1.5;
-  background: #dbebf8;
-  vertical-align: middle;
-  color: #505050;
-  border-radius: 15px 0px 0px 15px; /*左側の角丸く*/
 }
 
-ul li:before {
-  display: inline-block;
-  vertical-align: middle;
-  /*以下白丸つくる*/
-  content: "";
-  width: 1em;
-  height: 1em;
-  background: #fff;
-  border-radius: 50%;
-  margin-right: 8px;
+ul#index li {
+  border-left: solid 6px; /*左側の線*/
+  background: #f1f8ff; /*背景色*/
+  margin-bottom: 3px; /*下のバーとの余白*/
+  line-height: 1.5;
+  padding: 0.5em;
+  list-style-type: none !important; /*ポチ消す*/
 }
 
 ul#index li a {
@@ -28,9 +17,30 @@ ul#index li a {
   text-decoration: none;
 }
 
+ul#index li span {
+  color: #666666;
+}
+
 ul#index li span.dead {
   color: red;
   text-decoration: underline;
+}
+
+#delete {
+  margin-left: 45px;
+  padding: 0;
+  display: inline-block;
+  border: none;
+  background: none;
+}
+
+#delete:hover {
+  opacity: 0.5;
+}
+
+#delete:active {
+  position: relative;
+  top: 2px;
 }
 
 article {
@@ -41,11 +51,23 @@ article {
 #content {
   flex-grow: 1;
 }
+
 #side {
-  height: 50px;
+  height: fit-content;
   width: 100px;
-  padding: 10px;
-  border: solid 5px black;
-  border-radius: 15px;
-  margin-top: 10px;
+  border-left: solid 2px #cccccc;
+  margin: 10px;
+  margin-top: 60px;
+  padding-bottom: 20px;
+  padding-right: 20px;
+}
+
+#side header {
+  margin-left: 8px;
+}
+
+#filter {
+  border-left: none;
+  border-right: none;
+  margin-left: 2px;
 }

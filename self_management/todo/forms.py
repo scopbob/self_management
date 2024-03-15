@@ -34,6 +34,7 @@ class TodoModelForm(forms.ModelForm):
 
 
 class CategoryModelForm(forms.ModelForm):
+  color = forms.CharField(widget=forms.TextInput(attrs={'type': 'color'}))
   class Meta:
     model = Category
     exclude = ["user"]
