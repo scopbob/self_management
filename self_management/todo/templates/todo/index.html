@@ -13,11 +13,7 @@
     <form method="POST">{% csrf_token %}
       <ul id="index">
       {% for todo in todo_list %}
-        {% if todo.category.color %}
-        <li style="border-left-color:{{ todo.category.color }};">
-        {% else %}
-        <li>
-        {% endif %}
+        <li class="priority-{{ todo.priority }}" style="border-left-color:{{ todo.category.color }};">
           <input type="checkbox" name="delete" value={{todo.pk}} />
           <a href={% url "todo:detail" todo.pk %}>{{todo.title}}</a>
           <span id="timer-{{ todo.pk }}"></span>
@@ -106,6 +102,21 @@
         </select>
       </fieldset>
     </form>
+    <form method="POST">{% csrf_token %}
+      <fieldset id="order">
+        <legend>order</legend>
+        <select title="order" name="order" onchange="submit(this.form)">
+          <option value="">order by</option>
+          <option value="pk">create date</option>
+          <option value="due">due date</option>
+          <option value="start">start date</option>
+          <option value="priority">priority</option>
+          <option value="category">category</option>
+        </select>
+      </fieldset>
+    </form>
+
+
   </dev>
 </article>
 

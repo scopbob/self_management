@@ -38,6 +38,9 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     if "category" in self.request.GET:
       filter = self.request.GET.get("category")
       return user_todo.filter(category__name=filter)
+    if "order" in self.request.GET:
+      order = self.request.GET.get("order")
+      return user_todo.order_by(order)
     return user_todo
 
   def get_context_data(self, **kwargs):
@@ -56,6 +59,11 @@ class IndexView(LoginRequiredMixin, generic.ListView):
       url = add_queryparam("todo:index", dict(category=filter_element))
       if filter_element == "no filter":
         return redirect("todo:index")
+      return redirect(url)
+
+    if "order" in request.POST:
+      order_element = request.POST.get("order")
+      url = add_queryparam("todo:index", dict(order=order_element))
       return redirect(url)
 
     return redirect("todo:index")
