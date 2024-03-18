@@ -22,3 +22,19 @@ nav ul li a {
 nav ul a:hover {
   text-decoration: underline;
 }
+
+nav li button {
+  font-size: 15px;
+  border: solid 1px #cccccc;
+  background-color: #ffffff;
+  margin-right: 10px;
+}
+
+button:hover {
+  opacity: 0.5;
+}
+
+button:active {
+  position: relative;
+  top: 2px;
+}

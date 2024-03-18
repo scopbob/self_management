@@ -1,10 +1,14 @@
 {% extends "base.html "%}
-
+{% load static %}
+{% block link %}
+  <link rel="stylesheet" href="{% static 'todo/create.css' %}">
+{% endblock %}
 {% block title %}Create Todo{% endblock %}
 
 {% block content %}
   <form method="POST"> {% csrf_token %}
     {{ form.non_field_errors }}
+    <div id="form">
     {% for field in form %}
         <div class="field">
             {{ field.label_tag }}
@@ -18,6 +22,7 @@
             {{ field.errors }}
         </div>
     {% endfor %}
+    <div>
     <button type="submit">create</button>
     <button type="button" onclick="location.href='{% url "todo:index"%}'">cancel</button>
   </form>

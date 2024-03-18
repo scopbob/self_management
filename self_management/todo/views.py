@@ -8,11 +8,21 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Todo, Category
 from .forms import TodoModelForm, CategoryModelForm
 
-class CreaterOnly(UserPassesTestMixin):
+class TodoCreaterOnly(UserPassesTestMixin):
   def test_func(self):
     user = self.request.user
     todo_pk = self.kwargs["pk"]
     creater = Todo.objects.get(pk=todo_pk).user
+    return user.pk == creater.pk
+
+  def handle_no_permission(self):
+    return redirect("todo:index")
+
+class CategoryCreaterOnly(UserPassesTestMixin):
+  def test_func(self):
+    user = self.request.user
+    category_pk = self.kwargs["pk"]
+    creater = Category.objects.get(pk=category_pk).user
     return user.pk == creater.pk
 
   def handle_no_permission(self):
@@ -83,7 +93,7 @@ class DeleteCheck(LoginRequiredMixin, generic.ListView):
     return redirect("todo:index")
 
 
-class DetailView(LoginRequiredMixin, CreaterOnly, generic.DetailView):
+class DetailView(LoginRequiredMixin, TodoCreaterOnly, generic.DetailView):
   model = Todo
   template_name = "todo/detail.html"
 
@@ -99,7 +109,7 @@ class CreateNewTask(LoginRequiredMixin, generic.edit.CreateView):
     return kwgs
 
 
-class UpdateTask(LoginRequiredMixin, CreaterOnly, generic.edit.UpdateView):
+class UpdateTask(LoginRequiredMixin, TodoCreaterOnly, generic.edit.UpdateView):
   model = Todo
   template_name = "todo/update.html"
   form_class = TodoModelForm
@@ -122,3 +132,9 @@ class CreateCategory(LoginRequiredMixin, generic.edit.CreateView):
     kwgs = super().get_form_kwargs()
     kwgs["user"] = self.request.user
     return kwgs
+
+class UpdateCategory(LoginRequiredMixin, CategoryCreaterOnly, generic.edit.UpdateView):
+  model = Category
+  template_name = "todo/category_update.html"
+  form_class = CategoryModelForm
+  success_url = reverse_lazy("todo:category")

@@ -1,0 +1,11 @@
+{% extends "base.html "%}
+
+{% block title %}Update Category{% endblock %}
+
+{% block content %}
+  <form method="POST"> {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">更新</button>
+    <button type="button" onclick="location.href='{% url "todo:category_index" %}'">キャンセル</button>
+  </form>
+{% endblock %}

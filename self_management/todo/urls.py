@@ -10,4 +10,5 @@ urlpatterns = [
   path("delete/", views.DeleteCheck.as_view(), name="delete"),
   path("category/", views.CategoryList.as_view(), name="category_index"),
   path("category/create", views.CreateCategory.as_view(), name="category_create"),
+  path("category/update/<int:pk>/", views.UpdateCategory.as_view(), name="category_update")
 ]

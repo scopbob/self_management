@@ -81,6 +81,7 @@
         </li>
       {% endfor %}
       </ul>
+      <button type="button" onclick="location.href='{% url "todo:create" %}'" id="create"><img src="{% static 'todo/plus.png' %}" alt="create to do"></button>
       <button type="submit" id="delete"><img src="{% static 'todo/trash_can.png' %}" alt="delete"></button>
     </form>
   </div>
@@ -93,11 +94,11 @@
     <form method="POST">{% csrf_token %}
       <fieldset id="filter">
         <legend>filter</legend>
-        <select title="category" name="category" onchange="submit(this.form)">
+        <select id="category" title="category" name="category" onchange="submit(this.form)">
           <option value="">category filter</option>
           <option value="no filter">no filter</option>
           {% for category in category_list %}
-          <option value="{{category}}"> {{category}} </option>
+          <option value="{{category}}" style="background-color: {{category.color}};"> {{category}} </option>
           {% endfor %}
         </select>
       </fieldset>
@@ -115,10 +116,6 @@
         </select>
       </fieldset>
     </form>
-
-
   </dev>
 </article>
-
-<button type="button" onclick="location.href='{% url "todo:create" %}'">Create todo</button>
 {% endblock %}

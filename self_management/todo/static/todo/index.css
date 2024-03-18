@@ -12,7 +12,7 @@ ul#index li {
 }
 
 ul#index li.priority-1 {
-  background: #f08080; /*背景色*/
+  background: #ffd6d6; /*背景色*/
 }
 
 ul#index li.priority-2 {
@@ -39,20 +39,19 @@ ul#index li span.dead {
 }
 
 #delete {
-  margin-left: 45px;
+  margin-left: 20px;
   padding: 0;
   display: inline-block;
   border: none;
   background: none;
 }
 
-#delete:hover {
-  opacity: 0.5;
-}
-
-#delete:active {
-  position: relative;
-  top: 2px;
+#create {
+  margin-left: 45px;
+  padding: 0;
+  display: inline-block;
+  border: none;
+  background: none;
 }
 
 article {

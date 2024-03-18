@@ -1,14 +1,17 @@
 {% extends "base.html "%}
-
+{% load static %}
+{% block link %}
+  <link rel="stylesheet" href="{% static 'todo/category_index.css' %}">
+{% endblock %}
 {% block title %}Category{% endblock %}
 
 {% block content %}
-<ul>
+<ul id="index">
   {% for category in category_list %}
-    <li>
-      {{ category.name }}
+    <li style="border-left-color:{{ category.color }};">
+      <a href={% url "todo:category_update" category.pk %}>{{ category.name }}</a>
     </li>
   {% endfor %}
 </ul>
-<button type="button" onclick="location.href='{% url "todo:category_create" %}'">新規</button>
+<button type="button" onclick="location.href='{% url "todo:category_create" %}'" id="create"><img src="{% static 'todo/plus.png' %}" alt="create to do"></button>
 {% endblock content %}
