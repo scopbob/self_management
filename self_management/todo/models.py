@@ -1,7 +1,7 @@
 from django.db import models
 from accounts.models import User
 
-import datetime
+
 # Create your models here.
 class Category(models.Model):
     def __str__(self):
@@ -22,6 +22,7 @@ class Todo(models.Model):
   due = models.DateTimeField()
   start = models.DateTimeField()
   category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+
   PRIORITY_CHOICES = {
     1:"high",
     2:"middle",

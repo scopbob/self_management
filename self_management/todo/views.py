@@ -98,7 +98,7 @@ class DetailView(LoginRequiredMixin, TodoCreaterOnly, generic.DetailView):
   template_name = "todo/detail.html"
 
 
-class CreateNewTask(LoginRequiredMixin, generic.edit.CreateView):
+class TaskCreateView(LoginRequiredMixin, generic.edit.CreateView):
   template_name = "todo/create.html"
   form_class = TodoModelForm
   success_url = reverse_lazy("todo:index")

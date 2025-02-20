@@ -1,11 +1,36 @@
 {% extends "base.html "%}
 
 {% block title %}Log in{% endblock %}
+{% block style %}
+  .login-form {
+    width: 340px;
+    margin: 100px auto;
+    font-size: 15px;
+  }
+  .form-group {
+    margin-bottom: 1rem;
+  }
+{% endblock %}
 
 {% block content %}
-  <form method="POST"> {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="ログイン">
-    <p>or <a href="{% url 'accounts:signup' %}"> Sign up </a></p>
+  <form style="max-width:300px;margin:auto" action="" method="POST"> {% csrf_token %}
+    <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">
+      <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+      <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+    </svg>
+    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+    {% for field in form %}
+    <div class="form-group">
+        {{ field }}
+        {% if field.help_text %}
+        <span class="helptext">{{ field.help_text }}</span>
+        {% endif %}
+        {{ field.errors }}
+    </div>
+    {% endfor %}
+
+    <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+    <p class="mt-5 mb-3 text-body-secondary">or <a href="{% url 'accounts:signup' %}"> Sign up </a></p>
+    <p>© 2017–2024</p>
   </form>
 {% endblock %}
