@@ -1,6 +1,5 @@
 from django.shortcuts import redirect
 from django.views import generic
-from django.utils.http import urlencode
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -28,17 +27,6 @@ class CategoryCreaterOnly(UserPassesTestMixin):
   def handle_no_permission(self):
     return redirect("todo:index")
 
-def get_request_list(self, key):
-  request_list = eval(self.request.GET.get(key))
-  request_list = list(map(int, request_list))
-  return request_list
-
-def add_queryparam(redirect_name, parameters):
-  redirect_url = reverse(redirect_name)
-  add_parameters = urlencode(parameters)
-  url = f'{redirect_url}?{add_parameters}'
-  return url
-
 
 class IndexView(LoginRequiredMixin, generic.ListView):
   template_name = "todo/index.html"
@@ -47,44 +35,29 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     user_todo = Todo.objects.filter(user=self.request.user)
     if "category" in self.request.GET:
       filter = self.request.GET.get("category")
-      return user_todo.filter(category__name=filter)
+      if filter != "None":
+        user_todo = user_todo.filter(category__name=filter)
     if "order" in self.request.GET:
       order = self.request.GET.get("order")
-      return user_todo.order_by(order)
+      if order != "None":
+        user_todo = user_todo.order_by(order)
     return user_todo
 
   def get_context_data(self, **kwargs):
-      context = super().get_context_data(**kwargs)
-      context["category_list"] = Category.objects.filter(user=self.request.user)
-      return context
-
-  def post(self, request):
-    if "delete" in request.POST:
-      post_pks = request.POST.getlist("delete")
-      url = add_queryparam("todo:delete", dict(delete_list=post_pks))
-      return redirect(url)
-
-    if "category" in request.POST:
-      filter_element = request.POST.get("category")
-      url = add_queryparam("todo:index", dict(category=filter_element))
-      if filter_element == "no filter":
-        return redirect("todo:index")
-      return redirect(url)
-
-    if "order" in request.POST:
-      order_element = request.POST.get("order")
-      url = add_queryparam("todo:index", dict(order=order_element))
-      return redirect(url)
-
-    return redirect("todo:index")
+    context = super().get_context_data(**kwargs)
+    context["category_list"] = Category.objects.filter(user=self.request.user)
+    context["selected_category"] = self.request.GET.get("category")
+    context["selected_order"] = self.request.GET.get("order")
+    return context
 
 
 class DeleteCheck(LoginRequiredMixin, generic.ListView):
   template_name = "todo/delete_list.html"
 
   def get_queryset(self):
-    if "delete_list" in self.request.GET:
-      delete_check_list = get_request_list(self, "delete_list")
+    print(self.request.GET)
+    if "delete" in self.request.GET:
+      delete_check_list = self.request.GET.getlist("delete")
       return Todo.objects.filter(pk__in=delete_check_list, user=self.request.user)
 
   def post(self, request):

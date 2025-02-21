@@ -10,12 +10,12 @@
 <article>
   <div id="content">
     {% if todo_list %}
-    <form method="POST">{% csrf_token %}
+    <form action="{% url 'todo:delete' %}" method="GET">
       <ul id="index">
       {% for todo in todo_list %}
         <li class="priority-{{ todo.priority }}" style="border-left-color:{{ todo.category.color }};">
-          <input type="checkbox" name="delete" value={{todo.pk}} />
-          <a href={% url "todo:detail" todo.pk %}>{{todo.title}}</a>
+          <input type="checkbox" name="delete" value={{todo.pk}} id="todo_pk{{todo.pk}}" />
+          <label for="todo_pk{{todo.pk}}"><a href={% url "todo:detail" todo.pk %}>{{todo.title}}</a></label>
           <span id="timer-{{ todo.pk }}"></span>
           <progress id="proportion-{{ todo.pk }}"></progress>
           <script>
@@ -26,12 +26,12 @@
               if (due.getTime() < now.getTime()){
                 dead = true;
               }
-              const rest = Math.abs(due.getTime() - now.getTime());
-              const min = Math.floor(rest/1000/60) % 60;
+              const rest  = Math.abs(due.getTime() - now.getTime());
+              const mins  = Math.floor(rest/1000/60) % 60;
               const hours = Math.floor(rest/1000/60/60) % 24;
-              const days = Math.floor(rest/1000/60/60/24) % 7;
+              const days  = Math.floor(rest/1000/60/60/24) % 7;
               const weeks = Math.floor(rest/1000/60/60/24/7);
-              const count = [dead, weeks, days, hours, min];
+              const count = [dead, weeks, days, hours, mins];
               return count;
             }
 
@@ -91,23 +91,29 @@
 {% endif %}
   <dev id="side">
     <header>MENU</header>
-    <form method="POST">{% csrf_token %}
-      <fieldset id="filter">
+    <form method="GET">
+      <fieldset>
         <legend>filter</legend>
-        <select id="category" title="category" name="category" onchange="submit(this.form)">
-          <option value="">category filter</option>
-          <option value="no filter">no filter</option>
+        <script>
+          window.onload = function() {
+            var select_category = document.getElementById("category");
+            select_category.value = "{{selected_category}}";
+            var select_order = document.getElementById("order");
+            select_order.value = "{{selected_order}}";
+          };
+        </script>
+        <select class="form-select" aria-label="Default select example" id="category" title="category" name="category" onchange="submit(this.form)">
+          <option value="None">ALL</option>
           {% for category in category_list %}
           <option value="{{category}}" style="background-color: {{category.color}};"> {{category}} </option>
           {% endfor %}
         </select>
       </fieldset>
-    </form>
-    <form method="POST">{% csrf_token %}
-      <fieldset id="order">
+
+      <fieldset>
         <legend>order</legend>
-        <select title="order" name="order" onchange="submit(this.form)">
-          <option value="">order by</option>
+        <select class="form-select" aria-label="Default select example" id="order" title="order" name="order" onchange="submit(this.form)">
+          <option value="None">Normal</option>
           <option value="pk">create date</option>
           <option value="due">due date</option>
           <option value="start">start date</option>
