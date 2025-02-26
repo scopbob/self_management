@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Log out{% endblock %}
+
+{% block content %}
+<div class="container my-auto">
+  <div class="bg-body p-5 rounded">
+    <div class="col-sm-8 py-5 mx-auto">
+      <h1 class="display-5 fw-normal">Log out Complete!</h1>
+      <p><span id="count">5</span>秒後にログインページにジャンプします。<br>
+        ジャンプしない場合は、以下のURLをクリックしてください。</p>
+      <p><a href="{% url 'accounts:login' %}">ログインページ</a></p>
+  </div>
+  </div>
+</div>
+<script>
+let countshow = document.getElementById("count");
+let count = 5;
+function countDown() {
+  count--;
+  countshow.innerHTML = count;
+  console.log(count);
+  if (count <= 0) {
+    clearTimeout(timer);
+    location.href='{% url 'accounts:login' %}'
+  } else {
+    timer = setTimeout(countDown, 1000);
+  }
+}
+let timer = setTimeout(countDown, 1000);
+</script>
+{% endblock %}

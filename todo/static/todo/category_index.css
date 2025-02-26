@@ -1,0 +1,13 @@
+ul#index li {
+  background: #f8f9fa; /*背景色*/
+  border-left: solid 6px; /*左側の線*/
+  margin-bottom: 3px; /*下のバーとの余白*/
+  line-height: 1.5;
+  padding: 0.5em;
+  list-style-type: none !important; /*ポチ消す*/
+}
+ul#index li a {
+  color: black;
+  font-size: 20px;
+  text-decoration: none;
+}

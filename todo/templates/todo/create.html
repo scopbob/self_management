@@ -1,0 +1,49 @@
+{% extends "base.html "%}
+{% load static %}
+{% block title %}Create Todo{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center">
+  <form method="POST"> {% csrf_token %}
+    <div class="mb-2 form-group" id="form">
+      {% if form.non_field_errors %}
+      <div class="alert alert-danger" role="alert">
+        {% for error in form.non_field_errors %}
+        <p class="m-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+          </svg>
+          {{ error }}
+        </p>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% for field in form %}
+      <div class="mb-2">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.help_text %}
+          <span class="helptext">{{ field.help_text }}</span>
+          {% endif %}
+          {{ field.errors }}
+      </div>
+      {% endfor %}
+    </div>
+    <div class="container text-center">
+      <button class="btn btn-primary btn-sm" type="submit">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+        </svg>
+      create
+      </button>
+      <button class="btn btn-dark btn-sm" type="button" onclick='location.href="{% url 'todo:index' %}"' id="cancel">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+        </svg>
+      cancel
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html "%}
+{% load static %}
+{% block title %}Category{% endblock %}
+
+{% block content %}
+<div class="container my-auto d-flex">
+  <div class="flex-grow-1">
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm">
+          <div class="card-header py-3 d-flex justify-content-center">
+            <h4 class="my-0 fw-normal">今まで完了したtodoの数</h4>
+          </div>
+          <div class="card-body text-center">
+            <h1 class="card-title pricing-card-title">{{total_num}}</h1>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm">
+          <div class="card-header py-3 d-flex justify-content-center">
+            <h4 class="my-0 fw-normal">期限内に完了したtodoの数</h4>
+          </div>
+          <div class="card-body text-center">
+            <h1 class="card-title pricing-card-title">{{total_within_num}}</h1>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm">
+          <div class="card-header py-3 d-flex justify-content-center">
+            <h4 class="my-0 fw-normal">期限内に完了できなかったtodoの数</h4>
+          </div>
+          <div class="card-body text-center">
+            <h1 class="card-title pricing-card-title">{{progress.out_due_num}}</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

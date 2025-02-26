@@ -1,0 +1,27 @@
+{% extends "base.html "%}
+{% load static %}
+{% block link %}
+  <link rel="stylesheet" href="{% static 'todo/category_index.css' %}">
+{% endblock %}
+{% block title %}Category{% endblock %}
+
+{% block content %}
+<div class="container mb-auto d-flex">
+  <div class="flex-grow-1">
+    <ul id="index">
+    {% for category in category_list %}
+      <li class="rounded mb-2" style="border-left-color:{{ category.color }};">
+        <a href={% url "todo:category_update" category.pk %}>{{ category.name }}</a>
+      </li>
+    {% endfor %}
+    </ul>
+    <button class="btn btn-outline-dark btn-sm" type="button" onclick="location.href='{% url "todo:category_create" %}'">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+      </svg>
+    create
+    </button>
+  </div>
+</div>
+
+{% endblock content %}
