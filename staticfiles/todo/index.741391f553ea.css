@@ -1,0 +1,41 @@
+ul#index {
+  margin-bottom: 5px;
+}
+
+ul#index li {
+  border: solid 2px;
+  margin-bottom: 3px; /*下のバーとの余白*/
+  line-height: 1.5;
+  padding: 0.5em;
+  list-style-type: none !important; /*ポチ消す*/
+}
+
+ul#index li.priority-1 {
+  border-color: #e95464;
+  background: #ffd6d6; /*背景色*/
+}
+
+ul#index li.priority-2 {
+  border-color: #acafb3;
+  background: #f8f9fa; /*背景色*/
+}
+
+ul#index li.priority-3 {
+  border-color: #a0d8ef;
+  background: #f1f8ff; /*背景色*/
+}
+
+ul#index li a {
+  color: black;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+ul#index li span.timer {
+  color: #666666;
+}
+
+ul#index li span.dead {
+  color: red;
+  text-decoration: underline;
+}
