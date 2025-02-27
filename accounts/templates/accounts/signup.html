@@ -1,13 +1,10 @@
-{% extends "base.html "%}
-
-{% block title %}Sign up{% endblock %}
-
-{% block content %}
+{% extends 'base.html'%} {% block title %}Sign up{% endblock %} {% block content %}
 <div class="container my-auto">
-  <form style="max-width:300px;margin:auto" action="" method="POST" novalidate> {% csrf_token %}
+  <form style="max-width: 300px; margin: auto" action="" method="POST" novalidate>
+    {% csrf_token %}
     <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">
-      <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
-      <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+      <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0" />
+      <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
     </svg>
     <h1 class="h3 mb-3 fw-normal">Sign up</h1>
 
@@ -16,21 +13,19 @@
       {% for error in form.non_field_errors %}
       <p class="m-0">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
-          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-          <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+          <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z" />
         </svg>
         {{ error }}
       </p>
       {% endfor %}
     </div>
-    {% endif %}
-    {% for field in form %}
+    {% endif %} {% for field in form %}
     <div class="mb-3">
-      <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" maxlength="{{ field.field.max_length }}" id="{{ field.id_for_label }}" class="form-control {% if field.errors %}is-invalid{% endif %}" placeholder="{{ field.label }}">
+      <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" maxlength="{{ field.field.max_length }}" id="{{ field.id_for_label }}" class="form-control {% if field.errors %}is-invalid{% endif %}" placeholder="{{ field.label }}" />
       {% if field.help_text %}
       <div class="helptext form-text text-muted">{{ field.help_text }}</div>
-      {% endif %}
-      {% for error in field.errors %}
+      {% endif %} {% for error in field.errors %}
       <div class="invalid-feedback">{{ error }}</div>
       {% endfor %}
     </div>
