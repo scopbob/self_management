@@ -13,12 +13,15 @@ class TodoModelForm(forms.ModelForm):
     exclude = ["user"]
 
   def __init__(self, user=None, *args, **kwargs):
-      self.user = user
+      if user:
+        self.user = user
       super().__init__(*args, **kwargs)
+      self.fields['category'].queryset = Category.objects.filter(user=user)
       self.fields["start"].initial = timezone.now().replace(second=0)
       for field in self.fields.values():
           field.widget.attrs['class'] = 'form-control'
-          field.widget.attrs['placeholder'] = field.label  # placeholderにフィールドのラベルを入れる
+          field.widget.attrs['placeholder'] = field.label
+
 
   def save(self, commit=True):
       todo = super().save(commit=False)
@@ -27,6 +30,7 @@ class TodoModelForm(forms.ModelForm):
       if commit:
           todo.save()
       return todo
+
 
   def clean(self):
     cleaned_data = super().clean()

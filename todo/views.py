@@ -134,6 +134,12 @@ class UpdateTask(LoginRequiredMixin, TodoCreaterOnly, generic.edit.UpdateView):
   form_class = TodoModelForm
   success_url = reverse_lazy("todo:index")
 
+  def get_form_kwargs(self):
+    kwgs = super().get_form_kwargs()
+    kwgs["user"] = self.request.user
+    return kwgs
+
+
 
 class CategoryList(LoginRequiredMixin, generic.ListView):
   template_name = "todo/category_index.html"

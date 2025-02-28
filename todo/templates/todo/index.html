@@ -152,107 +152,115 @@
     <p class="display-6">No Tasks</p>
   </div>
 {% endif %}
-  <aside class="bd-aside sticky-top text-body-secondary align-self-start mx-2 mb-5 p-2 border border-3 rounded">
-    <h2 class="h5 pt-4 pb-3 mb-2 border-bottom border-2">MENU</h2>
-    <nav class="small" id="toc">
-      <form class="container p-0" method="GET">
-        <fieldset class="pb-3 mb-2 border-bottom">
-          <legend>filter</legend>
-          <script>
-            window.onload = function() {
-              var select_category = document.getElementById("category_filter");
-              select_category.value = "{{selected_category}}";
-              var selected_deadline_filter = document.getElementById("deadline_filter");
-              selected_deadline_filter.value = "{{selected_deadline}}";
-              var select_order = document.getElementById("order");
-              select_order.value = "{{selected_order}}";
-            };
 
-            function displayCategoryOption(background_color, pk) {
-              const category_option_id = "category-option-" + pk;
-              const category_option = document.getElementById(category_option_id);
+  <aside class="bd-aside sticky-top d-flex flex-column mx-2" >
+    <button class="d-md-none btn btn-primary align-self-end d-flex justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive" style="width: 40px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+      </svg>
+    </button>
+    <div class="d-md-flex flex-column text-body-secondary align-self-start mb-5 p-2 border border-3 rounded offcanvas-md offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasResponsive" aria-labelledby="offcanvasResponsiveLabel">
+      <h2 class="h5 pt-4 pb-3 mb-2 border-bottom border-2">MENU</h2>
+      <nav class="small" id="toc">
+        <form class="container p-0" method="GET">
+          <fieldset class="pb-3 mb-2 border-bottom">
+            <legend>filter</legend>
+            <script>
+              window.onload = function() {
+                var select_category = document.getElementById("category_filter");
+                select_category.value = "{{selected_category}}";
+                var selected_deadline_filter = document.getElementById("deadline_filter");
+                selected_deadline_filter.value = "{{selected_deadline}}";
+                var select_order = document.getElementById("order");
+                select_order.value = "{{selected_order}}";
+              };
 
-              text_color = decideTextBW(background_color);
-              category_option.style.backgroundColor = background_color;
-              category_option.style.color = text_color;
+              function displayCategoryOption(background_color, pk) {
+                const category_option_id = "category-option-" + pk;
+                const category_option = document.getElementById(category_option_id);
 
-            }
-          </script>
-          <label>category</label>
-          <select class="form-select" aria-label="Default select example" id="category_filter" title="category" name="category_filter" onchange="submit(this.form)">
-            <option value="None">ALL</option>
-            {% for category in category_list %}
-            <option id="category-option-{{category.pk}}" value="{{category}}" style="background-color: {{category.color}};"> {{category}} </option>
-            <script>displayCategoryOption('{{ category.color }}', '{{ category.pk }}')</script>
-            {% endfor %}
-          </select>
-          <label>deadline</label>
-          <select class="form-select" aria-label="Default select example" id="deadline_filter" title="deadline" name="deadline_filter" onchange="submit(this.form)">
-            <option value="None">ALL</option>
-            <option value="within">期限内</option>
-            <option value="out">期限外</option>
-          </select>
-        </fieldset>
+                text_color = decideTextBW(background_color);
+                category_option.style.backgroundColor = background_color;
+                category_option.style.color = text_color;
 
-        <fieldset class="pb-3 mb-2 border-bottom">
-          <legend>order</legend>
-          <select class="form-select" aria-label="Default select example" id="order" title="order" name="order" onchange="submit(this.form)">
-            <option value="None">create date</option>
-            <option value="due">due date</option>
-            <option value="start">start date</option>
-            <option value="priority">priority</option>
-            <option value="category">category</option>
-          </select>
-        </fieldset>
-      </form>
-      <div class="container p-0">
-        <legend>tool</legend>
+              }
+            </script>
+            <label>category</label>
+            <select class="form-select" aria-label="Default select example" id="category_filter" title="category" name="category_filter" onchange="submit(this.form)">
+              <option value="None">ALL</option>
+              {% for category in category_list %}
+              <option id="category-option-{{category.pk}}" value="{{category}}" style="background-color: {{category.color}};"> {{category}} </option>
+              <script>displayCategoryOption('{{ category.color }}', '{{ category.pk }}')</script>
+              {% endfor %}
+            </select>
+            <label>deadline</label>
+            <select class="form-select" aria-label="Default select example" id="deadline_filter" title="deadline" name="deadline_filter" onchange="submit(this.form)">
+              <option value="None">ALL</option>
+              <option value="within">期限内</option>
+              <option value="out">期限外</option>
+            </select>
+          </fieldset>
 
-        <div class="container p-0 d-flex flex-column justify-content-center">
-          <div class="container d-flex justify-content-center align-items-center gap-2 pb-3 ">
-            <button class="btn btn-outline-primary btn-sm" type="button" onclick="location.href='{% url "todo:create" %}'">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
-              </svg>
-            create
-            </button>
-            <button class="btn btn-outline-success btn-sm" type="submit" form="todo_check" formaction="{% url 'todo:success' %}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
-              </svg>
-            success</button>
-            <button class="btn btn-outline-danger btn-sm" type="submit" form="todo_check" formaction="{% url 'todo:delete' %}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" alt="delete" viewBox="0 0 16 16">
-              <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
-              </svg>
-            delete</button>
-          </div>
-          <div class="container d-flex justify-content-center align-items-center gap-2 pb-3">
-            <button class="btn btn-outline-secondary btn-sm" type="button" onclick="location.href='#'">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-up" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708z"/>
-                <path fill-rule="evenodd" d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
-              </svg>
-            pg up
-            </button>
-            <button class="btn btn-outline-secondary btn-sm" type="button" onclick="location.href='#footer'">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
-                <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
-              </svg>
-            pg down
-            </button>
-            <button class="btn btn-outline-secondary btn-sm" type="button" onclick="location.href='{% url 'todo:index' %}'">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
-                <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
-              </svg>
-            reset
-            </button>
+          <fieldset class="pb-3 mb-2 border-bottom">
+            <legend>order</legend>
+            <select class="form-select" aria-label="Default select example" id="order" title="order" name="order" onchange="submit(this.form)">
+              <option value="None">create date</option>
+              <option value="due">due date</option>
+              <option value="start">start date</option>
+              <option value="priority">priority</option>
+              <option value="category">category</option>
+            </select>
+          </fieldset>
+        </form>
+        <div class="container p-0">
+          <legend>tool</legend>
+
+          <div class="container p-0 d-flex flex-column justify-content-center">
+            <div class="container d-flex justify-content-center align-items-center gap-2 pb-3 ">
+              <button class="btn btn-outline-primary btn-sm" type="button" onclick="location.href='{% url "todo:create" %}'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+                </svg>
+              create
+              </button>
+              <button class="btn btn-outline-success btn-sm" type="submit" form="todo_check" formaction="{% url 'todo:success' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                  <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+                </svg>
+              success</button>
+              <button class="btn btn-outline-danger btn-sm" type="submit" form="todo_check" formaction="{% url 'todo:delete' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" alt="delete" viewBox="0 0 16 16">
+                <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                </svg>
+              delete</button>
+            </div>
+            <div class="container d-flex justify-content-center align-items-center gap-2 pb-3">
+              <button class="btn btn-outline-secondary btn-sm" type="button" onclick="location.href='#'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-up" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708z"/>
+                  <path fill-rule="evenodd" d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
+                </svg>
+              pg up
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" type="button" onclick="location.href='#footer'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                  <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                </svg>
+              pg down
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" type="button" onclick="location.href='{% url 'todo:index' %}'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+                  <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+                </svg>
+              reset
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
   </aside>
 </div>
 {% endblock %}
