@@ -7,3 +7,4 @@ memo.txt
 .vscode/
 .prettierignore
 local_settings.py
+.env

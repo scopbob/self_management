@@ -1,7 +1,3 @@
-ul#index {
-  margin-bottom: 5px;
-}
-
 ul#index li {
   border: solid 2px;
   margin-bottom: 3px; /*下のバーとの余白*/
@@ -29,13 +25,4 @@ ul#index li a {
   color: black;
   font-size: 20px;
   text-decoration: none;
-}
-
-ul#index li span.timer {
-  color: #666666;
-}
-
-ul#index li span.dead {
-  color: red;
-  text-decoration: underline;
 }

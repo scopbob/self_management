@@ -165,6 +165,20 @@ class UpdateCategory(LoginRequiredMixin, CategoryCreaterOnly, generic.edit.Updat
   success_url = reverse_lazy("todo:category")
 
 
+class DeleteCategoryCheck(LoginRequiredMixin, generic.ListView):
+  template_name = "todo/category_delete_list.html"
+
+  def get_queryset(self):
+    if "checked" in self.request.GET:
+      delete_check_list = self.request.GET.getlist("checked")
+      return Category.objects.filter(pk__in=delete_check_list, user=self.request.user)
+
+  def post(self, request):
+    post_pks = request.POST.getlist("checked")
+    Category.objects.filter(pk__in=post_pks, user=self.request.user).delete()
+    return redirect("todo:category_index")
+
+
 class ProgressView(LoginRequiredMixin, generic.DetailView):
   template_name = "todo/progress.html"
 

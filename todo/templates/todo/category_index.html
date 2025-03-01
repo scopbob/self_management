@@ -8,20 +8,74 @@
 {% block content %}
 <div class="container mb-auto d-flex">
   <div class="flex-grow-1">
-    <ul id="index">
-    {% for category in category_list %}
-      <li class="rounded mb-2" style="border-left-color:{{ category.color }};">
-        <a href={% url "todo:category_update" category.pk %}>{{ category.name }}</a>
-      </li>
-    {% endfor %}
-    </ul>
-    <button class="btn btn-outline-dark btn-sm" type="button" onclick="location.href='{% url "todo:category_create" %}'">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
-      </svg>
-    create
-    </button>
+    <form id="category_check" action="?" method="GET">
+      <ul id="index">
+      {% for category in category_list %}
+        <li class="rounded mb-2" style="border-left-color:{{ category.color }};">
+          <div class="form-check d-flex align-items-center gap-2">
+            <input class="form-check-input" type="checkbox" name="checked" value={{category.pk}} id="category_pk{{category.pk}}" />
+            <label class="form-check-label d-flex align-items-center gap-2" for="category_pk{{category.pk}}"><a href={% url "todo:category_update" category.pk %}>{{category.name}}</a></label>
+          </div>
+        </li>
+      {% endfor %}
+      </ul>
+    </form>
   </div>
+  <aside class="aside sticky-top align-self-start mx-2" >
+    <button class="d-md-none btn btn-outline-secondary align-self-end mt-2 d-flex justify-content-center align-items-center p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive" style="width: 36px; height: 36px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+      </svg>
+    </button>
+    <div class="d-md-flex flex-column text-body-secondary my-2 p-2 border border-3 rounded offcanvas-md offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasResponsive" aria-labelledby="offcanvasResponsiveLabel">
+      <div class="offcanvas-header pb-3 mb-2 border-bottom border-2">
+        <h2 class="h5">MENU</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close"></button>
+      </div>
+        <div class="container p-0">
+          <legend>tool</legend>
+
+          <div class="container p-0 d-flex flex-column justify-content-center">
+            <div class="container d-flex justify-content-center align-items-center gap-2 pb-3 ">
+              <button class="btn btn-outline-primary btn-sm" type="button" onclick="location.href='{% url "todo:category_create" %}'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+                </svg>
+              create
+              </button>
+              <button class="btn btn-outline-danger btn-sm" type="submit" form="category_check" formaction="{% url 'todo:category_delete' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" alt="delete" viewBox="0 0 16 16">
+                <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                </svg>
+              delete</button>
+            </div>
+            <div class="container d-flex justify-content-center align-items-center gap-2 pb-3">
+              <button class="btn btn-outline-secondary btn-sm" type="button" onclick="location.href='#'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-up" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708z"/>
+                  <path fill-rule="evenodd" d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
+                </svg>
+              pg up
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" type="button" onclick="location.href='#footer'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                  <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                </svg>
+              pg down
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" type="button" onclick="location.href='{% url 'todo:category_index' %}'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+                  <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+                </svg>
+              reset
+              </button>
+            </div>
+          </div>
+        </div>
+    </div>
+  </aside>
 </div>
 
 {% endblock content %}

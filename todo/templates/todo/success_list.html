@@ -7,163 +7,163 @@
 {% block title %}Delete List{% endblock %}
 
 {% block content %}
-{% if todo_list %}
-<div class="container d-flex">
+<div class="container mb-auto d-flex">
+  {% if todo_list %}
   <div class="flex-grow-1">
     <h1>以下のtodoを完了</h1>
-      <form method="POST">{% csrf_token %}
-        <ul id="index">
-          {% for todo in todo_list %}
-          <li class="rounded priority-{{ todo.priority }} mb-2">
-            <div class="form-check d-flex align-items-center gap-2">
-              <input class="form-check-input" type="checkbox" name="checked" value={{todo.pk}} id="todo_pk{{todo.pk}}" checked/>
-              <label class="form-check-label d-flex align-items-center gap-2" for="todo_pk{{todo.pk}}"><a href={% url "todo:update" todo.pk %}>{{todo.title}}</a> <span id="category-badge-{{ todo.pk }}" class="badge">{{todo.category}}</span></label>
+    <form method="POST">{% csrf_token %}
+      <ul id="index">
+        {% for todo in todo_list %}
+        <li class="rounded priority-{{ todo.priority }} mb-2">
+          <div class="form-check d-flex align-items-center gap-2">
+            <input class="form-check-input" type="checkbox" name="checked" value={{todo.pk}} id="todo_pk{{todo.pk}}" checked/>
+            <label class="form-check-label d-flex align-items-center gap-2" for="todo_pk{{todo.pk}}"><a href={% url "todo:update" todo.pk %}>{{todo.title}}</a> <span id="category-badge-{{ todo.pk }}" class="badge">{{todo.category}}</span></label>
+          </div>
+          <span id="timer-{{ todo.pk }}" class="timer"></span>
+          <div class="contaier d-flex align-items-center mb-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-hourglass-split" viewBox="0 0 16 16">
+              <path d="M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48zm1 0v3.17c2.134.181 3 1.48 3 1.48a3.5 3.5 0 0 0-1.989-3.158C8.978 9.586 8.5 9.052 8.5 8.351z"/>
+            </svg>
+            <div class="progress flex-grow-1" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" id="proportion-{{ todo.pk }}"></div>
             </div>
-            <span id="timer-{{ todo.pk }}" class="timer"></span>
-            <div class="contaier d-flex align-items-center mb-1">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-hourglass-split" viewBox="0 0 16 16">
-                <path d="M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48zm1 0v3.17c2.134.181 3 1.48 3 1.48a3.5 3.5 0 0 0-1.989-3.158C8.978 9.586 8.5 9.052 8.5 8.351z"/>
-              </svg>
-              <div class="progress flex-grow-1" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" id="proportion-{{ todo.pk }}"></div>
-              </div>
+          </div>
+          <div class="contaier d-flex align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-walking" viewBox="0 0 16 16">
+              <path d="M9.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0M6.44 3.752A.75.75 0 0 1 7 3.5h1.445c.742 0 1.32.643 1.243 1.38l-.43 4.083a1.8 1.8 0 0 1-.088.395l-.318.906.213.242a.8.8 0 0 1 .114.175l2 4.25a.75.75 0 1 1-1.357.638l-1.956-4.154-1.68-1.921A.75.75 0 0 1 6 8.96l.138-2.613-.435.489-.464 2.786a.75.75 0 1 1-1.48-.246l.5-3a.75.75 0 0 1 .18-.375l2-2.25Z"/>
+              <path d="M6.25 11.745v-1.418l1.204 1.375.261.524a.8.8 0 0 1-.12.231l-2.5 3.25a.75.75 0 1 1-1.19-.914zm4.22-4.215-.494-.494.205-1.843.006-.067 1.124 1.124h1.44a.75.75 0 0 1 0 1.5H11a.75.75 0 0 1-.531-.22Z"/>
+            </svg>
+            <div class="progress flex-grow-1" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar bg-success" style="width: {{ todo.progress }}%;"></div>
             </div>
-            <div class="contaier d-flex align-items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-walking" viewBox="0 0 16 16">
-                <path d="M9.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0M6.44 3.752A.75.75 0 0 1 7 3.5h1.445c.742 0 1.32.643 1.243 1.38l-.43 4.083a1.8 1.8 0 0 1-.088.395l-.318.906.213.242a.8.8 0 0 1 .114.175l2 4.25a.75.75 0 1 1-1.357.638l-1.956-4.154-1.68-1.921A.75.75 0 0 1 6 8.96l.138-2.613-.435.489-.464 2.786a.75.75 0 1 1-1.48-.246l.5-3a.75.75 0 0 1 .18-.375l2-2.25Z"/>
-                <path d="M6.25 11.745v-1.418l1.204 1.375.261.524a.8.8 0 0 1-.12.231l-2.5 3.25a.75.75 0 1 1-1.19-.914zm4.22-4.215-.494-.494.205-1.843.006-.067 1.124 1.124h1.44a.75.75 0 0 1 0 1.5H11a.75.75 0 0 1-.531-.22Z"/>
-              </svg>
-              <div class="progress flex-grow-1" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar bg-success" style="width: {{ todo.progress }}%;"></div>
-              </div>
-            </div>
-            <script>
-              {% if forloop.first %}
-              function calcRemainingTime(due){
-                const now = new Date();
-                var dead = false;
-                if (due.getTime() < now.getTime()){
-                  dead = true;
-                }
-                const rest  = Math.abs(due.getTime() - now.getTime());
-                const mins  = Math.floor(rest/1000/60) % 60;
-                const hours = Math.floor(rest/1000/60/60) % 24;
-                const days  = Math.floor(rest/1000/60/60/24) % 7;
-                const weeks = Math.floor(rest/1000/60/60/24/7);
-                const count = [dead, weeks, days, hours, mins];
-                return count;
+          </div>
+          <script>
+            {% if forloop.first %}
+            function calcRemainingTime(due){
+              const now = new Date();
+              var dead = false;
+              if (due.getTime() < now.getTime()){
+                dead = true;
               }
+              const rest  = Math.abs(due.getTime() - now.getTime());
+              const mins  = Math.floor(rest/1000/60) % 60;
+              const hours = Math.floor(rest/1000/60/60) % 24;
+              const days  = Math.floor(rest/1000/60/60/24) % 7;
+              const weeks = Math.floor(rest/1000/60/60/24/7);
+              const count = [dead, weeks, days, hours, mins];
+              return count;
+            }
 
-              function calcProportion(start, due){
-                const now = new Date();
-                const progress = now - start;
-                const whole = due - start;
-                const proportion = progress / whole
-                return proportion
-              }
+            function calcProportion(start, due){
+              const now = new Date();
+              const progress = now - start;
+              const whole = due - start;
+              const proportion = progress / whole
+              return proportion
+            }
 
-              function displayRemainingTime(due, start, pk) {
-                const pk_timer = "timer-" + pk;
-                const timer = document.getElementById(pk_timer)
-                const pk_proportion = "proportion-" + pk;
-                const progress_bar = document.getElementById(pk_proportion)
+            function displayRemainingTime(due, start, pk) {
+              const pk_timer = "timer-" + pk;
+              const timer = document.getElementById(pk_timer)
+              const pk_proportion = "proportion-" + pk;
+              const progress_bar = document.getElementById(pk_proportion)
 
-                const proportion = calcProportion(start, due);
-                if(proportion > 0){
-                  //display remaining time
-                  const counter = calcRemainingTime(due);
-                  const time = `${counter[1]}週間${counter[2]}日${counter[3]}時間${counter[4]}分`
+              const proportion = calcProportion(start, due);
+              if(proportion > 0){
+                //display remaining time
+                const counter = calcRemainingTime(due);
+                const time = `${counter[1]}週間${counter[2]}日${counter[3]}時間${counter[4]}分`
 
-                  //締め切り切れならば
-                  if (counter[0]){
-                    progress_bar.style.width = "100%";
-                    progress_bar.classList.remove("progress-bar-animated");
-                    progress_bar.classList.add("bg-danger");
-                    timer.textContent = "期限から" + time + "経過";
-                    timer.className = "dead";
-                  }
-                  //締め切り内
-                  else{
-                    progress_bar.style.width = proportion*100 + "%";
-                    timer.textContent = "期限まで残り" + time;
-                    //どのくらい余裕があるかで三分割
-                    if (proportion > 0.66){
-                      progress_bar.classList.add("bg-danger");
-                    }
-                    else if (proportion > 0.33){
-                      progress_bar.classList.add("bg-warning");
-                    }
-                    else{
-                      progress_bar.classList.add("bg-primary");
-                    }
-                  }
+                //締め切り切れならば
+                if (counter[0]){
+                  progress_bar.style.width = "100%";
+                  progress_bar.classList.remove("progress-bar-animated");
+                  progress_bar.classList.add("bg-danger");
+                  timer.textContent = "期限から" + time + "経過";
+                  timer.className = "dead";
                 }
+                //締め切り内
                 else{
-                  timer.textContent = "まだ開始されていないタスク"
-                  progress_bar.style.visibility = "hidden";
+                  progress_bar.style.width = proportion*100 + "%";
+                  timer.textContent = "期限まで残り" + time;
+                  //どのくらい余裕があるかで三分割
+                  if (proportion > 0.66){
+                    progress_bar.classList.add("bg-danger");
+                  }
+                  else if (proportion > 0.33){
+                    progress_bar.classList.add("bg-warning");
+                  }
+                  else{
+                    progress_bar.classList.add("bg-primary");
+                  }
                 }
-                setTimeout(displayRemainingTime, 1000*60, due, start, pk);
+              }
+              else{
+                timer.textContent = "まだ開始されていないタスク"
+                progress_bar.style.visibility = "hidden";
+              }
+              setTimeout(displayRemainingTime, 1000*60, due, start, pk);
+            }
+
+            function displayCategoryBadge(background_color_code, pk) {
+              const category_badge_pk = "category-badge-" + pk;
+              const category_badge = document.getElementById(category_badge_pk);
+              if(background_color_code == ""){
+                category_badge.style.display = "None"
+                return
               }
 
-              function displayCategoryBadge(background_color_code, pk) {
-                const category_badge_pk = "category-badge-" + pk;
-                const category_badge = document.getElementById(category_badge_pk);
-                if(background_color_code == ""){
-                  category_badge.style.display = "None"
-                  return
-                }
+              // RGBをY(輝度)に変換
+              var rgb = {
+                red   : 0,
+                green : 0,
+                blue  : 0
+            };
+              rgb.red   = parseInt(background_color_code.substring(1, 3), 16);
+              rgb.green = parseInt(background_color_code.substring(3, 5), 16);
+              rgb.blue  = parseInt(background_color_code.substring(5, 7), 16);
 
-                // RGBをY(輝度)に変換
-                var rgb = {
-                  red   : 0,
-                  green : 0,
-                  blue  : 0
-              };
-                rgb.red   = parseInt(background_color_code.substring(1, 3), 16);
-                rgb.green = parseInt(background_color_code.substring(3, 5), 16);
-                rgb.blue  = parseInt(background_color_code.substring(5, 7), 16);
+              const brightness = Math.floor((parseInt(rgb.red, 16) * 0.299) + (parseInt(rgb.green, 16) * 0.587) + (parseInt(rgb.blue, 16) * 0.114))
 
-                const brightness = Math.floor((parseInt(rgb.red, 16) * 0.299) + (parseInt(rgb.green, 16) * 0.587) + (parseInt(rgb.blue, 16) * 0.114))
+              const text_color = brightness >= 180 ? '#000000' : '#FFFFFF';
+              category_badge.style.backgroundColor = background_color_code;
+              category_badge.style.color = text_color;
+            }
+            {% endif %}
 
-                const text_color = brightness >= 180 ? '#000000' : '#FFFFFF';
-                category_badge.style.backgroundColor = background_color_code;
-                category_badge.style.color = text_color;
-              }
-              {% endif %}
-
-              {% autoescape off %}
-              var due = new Date("{{ todo.due.isoformat }}");
-              var start = new Date("{{ todo.start.isoformat }}");
-              {% endautoescape %}
-              displayRemainingTime(due, start, '{{ todo.pk }}');
-              displayCategoryBadge('{{ todo.category.color }}', '{{ todo.pk }}');
-            </script>
-          </li>
-          {% endfor %}
-        </ul>
-          <button class="btn btn-success btn-sm" type="submit">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-              <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
-            </svg>
-          success</button>
-          <button class="btn btn-dark btn-sm" type="button" onclick='location.href="{% url 'todo:index' %}"' id="cancel">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-            </svg>
-          cancel
-          </button>
-      </form>
-  </div>
-    {% else %}
-    <div class="container text-center">
-      <p class="display-6">No Tasks</p>
-      <button class="btn btn-outline-dark btn-sm" type="button" onclick='location.href="{% url 'todo:index' %}"' id="cancel">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+            {% autoescape off %}
+            var due = new Date("{{ todo.due.isoformat }}");
+            var start = new Date("{{ todo.start.isoformat }}");
+            {% endautoescape %}
+            displayRemainingTime(due, start, '{{ todo.pk }}');
+            displayCategoryBadge('{{ todo.category.color }}', '{{ todo.pk }}');
+          </script>
+        </li>
+        {% endfor %}
+      </ul>
+      <button class="btn btn-success btn-sm" type="submit">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+          <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
         </svg>
-      back
+      success</button>
+      <button class="btn btn-dark btn-sm" type="button" onclick='location.href="{% url 'todo:index' %}"' id="cancel">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+        </svg>
+      cancel
       </button>
-    </div>
-    {% endif %}
+    </form>
+  </div>
+  {% else %}
+  <div class="container text-center">
+    <p class="display-6">No Tasks</p>
+    <button class="btn btn-outline-dark btn-sm" type="button" onclick='location.href="{% url 'todo:index' %}"' id="cancel">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+      </svg>
+    back
+    </button>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
